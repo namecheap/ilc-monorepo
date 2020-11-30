@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2019",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "../../dist/server",
+    "strict": true,
+    "types" : ["node"],
+    "esModuleInterop": true,
+    "resolveJsonModule": true
+  },
+  "include": ["./"],
+  "exclude": ["node_modules", "**/__tests__/*"],
+  "references": [
+    {
+      "path": "../app"
+    }
+  ]
+}

@@ -3,11 +3,12 @@
     "target": "ES2019",
     "module": "commonjs",
     "declaration": true,
-    "outDir": "./dist",
+    "outDir": "../../dist/server",
     "strict": true,
     "types" : ["node", "mocha"],
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
-  "include": ["src"],
+  "include": ["./"],
   "exclude": ["node_modules", "**/__tests__/*"]
 }

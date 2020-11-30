@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "composite": true,
+    "target": "es2015",
+    "module": "commonjs",
+    "declaration": true,
+    "outDir": "../../dist/app",
+    "strict": true,
+    "types" : ["mocha"],
+    "esModuleInterop": true
+  },
+  "include": ["./"],
+  "exclude": ["node_modules", "**/__tests__/*"]
+}
