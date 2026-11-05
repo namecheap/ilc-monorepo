@@ -1,0 +1,162 @@
+name: Release
+
+# Runs after CI finished on master and only when it passed, so nothing unverified
+# gets versioned or published. Follows the four-job layout from the changesets
+# action docs so each job holds only the permissions its step needs:
+#
+#   select-mode  reads the repo and decides: pending changesets -> "version",
+#                none pending -> "publish" (the version PR was just merged).
+#   version      opens or updates the "chore: version packages" pull request.
+#                Writes through the GitHub App token, so the PR triggers CI.
+#   pack         builds and packs the tarballs with read access only.
+#   publish      uploads the packed tarballs to npm with the OIDC token and
+#                creates one GitHub release per package. It never runs a build.
+#
+# npm authentication is trusted publishing: each package on npmjs.com lists this
+# repository, this workflow file and the npm_publish environment as its trusted
+# publisher. No npm token secret exists. Provenance attestations come with it.
+
+on:
+    workflow_run:
+        workflows: [CI]
+        branches: [master]
+        types: [completed]
+
+# Back-to-back merges to master queue instead of racing on the same version PR.
+concurrency:
+    group: release
+    cancel-in-progress: false
+
+permissions: {}
+
+env:
+    HUSKY: 0
+
+jobs:
+    select-mode:
+        name: Select mode
+        if: github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'master'
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        outputs:
+            mode: ${{ steps.select-mode.outputs.mode }}
+            publish-plan-artifact-id: ${{ steps.select-mode.outputs.publish-plan-artifact-id }}
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  # The exact commit CI verified, not whatever master points at by now
+                  ref: ${{ github.event.workflow_run.head_sha }}
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+            - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version-file: .nvmrc
+                  package-manager-cache: false
+
+            - run: pnpm install --frozen-lockfile
+
+            - id: select-mode
+              uses: changesets/action/select-mode@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+
+    version:
+        name: Open version PR
+        needs: select-mode
+        if: needs.select-mode.outputs.mode == 'version'
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        steps:
+            # A GitHub App token, not the default GITHUB_TOKEN, is required: events
+            # authored by GITHUB_TOKEN do not trigger other workflows, so the version
+            # PR would show no CI checks. The App must grant `contents: write` and
+            # `pull-requests: write`.
+            - name: Generate GitHub App token
+              id: app-token
+              uses: actions/create-github-app-token@64ab729a6294000f5aa4a4bc0b73d1f32bc45510 # v3.3.0
+              with:
+                  client-id: ${{ vars.APP_CLIENT_ID }}
+                  private-key: ${{ secrets.APP_PRIVATE_KEY }}
+
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }}
+                  fetch-depth: 0
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+            - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version-file: .nvmrc
+                  package-manager-cache: false
+
+            - run: pnpm install --frozen-lockfile
+
+            - uses: changesets/action/version@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+              with:
+                  github-token: ${{ steps.app-token.outputs.token }}
+                  script: pnpm changeset version
+                  pr-title: 'chore: version packages'
+                  commit-message: 'chore: version packages'
+                  pr-base-branch: master
+
+    pack:
+        name: Build and pack
+        needs: select-mode
+        if: needs.select-mode.outputs.mode == 'publish'
+        runs-on: ubuntu-latest
+        permissions:
+            contents: read
+        outputs:
+            pack-dir-artifact-id: ${{ steps.pack.outputs.pack-dir-artifact-id }}
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }}
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+            - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version-file: .nvmrc
+                  package-manager-cache: false
+
+            - run: pnpm install --frozen-lockfile
+            - run: pnpm build
+
+            - id: pack
+              uses: changesets/action/pack@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+              with:
+                  publish-plan-artifact-id: ${{ needs.select-mode.outputs.publish-plan-artifact-id }}
+
+    publish:
+        name: Publish
+        needs: pack
+        runs-on: ubuntu-latest
+        environment: npm_publish
+        permissions:
+            contents: write # tags and GitHub releases
+            id-token: write # npm trusted publishing
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  ref: ${{ github.event.workflow_run.head_sha }}
+                  persist-credentials: false
+
+            - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+            - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version-file: .nvmrc
+                  package-manager-cache: false
+
+            - run: pnpm install --frozen-lockfile
+
+            - uses: changesets/action/publish@ae32849d5ba541f9ae29e40e22a623bc13562f51 # v2.1.2
+              with:
+                  pack-dir-artifact-id: ${{ needs.pack.outputs.pack-dir-artifact-id }}
