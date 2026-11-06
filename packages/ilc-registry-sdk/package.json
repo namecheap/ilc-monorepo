@@ -1,0 +1,37 @@
+{
+    "name": "ilc-registry-sdk",
+    "version": "0.0.0",
+    "description": "SDK for the ILC registry API",
+    "keywords": [
+        "ilc"
+    ],
+    "author": "Namecheap",
+    "license": "Apache-2.0",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/namecheap/ilc-packages.git",
+        "directory": "packages/ilc-registry-sdk"
+    },
+    "type": "module",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "default": "./dist/index.js"
+        }
+    },
+    "files": [
+        "dist"
+    ],
+    "engines": {
+        "node": "^22"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "build": "tsc -b tsconfig.lib.json",
+        "clean": "rm -rf dist",
+        "test": "vitest run",
+        "typecheck": "tsc -b"
+    }
+}

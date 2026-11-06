@@ -1,0 +1,55 @@
+name: CI
+
+on:
+    push:
+        branches: [master]
+        tags-ignore: ['**']
+    pull_request:
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+# One run per branch. PR pushes cancel the previous run; master runs all finish, since Release waits on them.
+concurrency:
+    group: ci-${{ github.ref }}
+    cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+env:
+    HUSKY: 0
+
+jobs:
+    build:
+        name: Build and test
+        runs-on: ubuntu-latest
+        timeout-minutes: 15
+        steps:
+            - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+              with:
+                  fetch-depth: 0
+
+            - uses: pnpm/action-setup@73e46992e05b19abd31f2f3c20e0e7370d762115 # v6.1.1
+
+            - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+              with:
+                  node-version-file: .nvmrc
+                  cache: pnpm
+
+            # The lockfile is kept for local work and the release build. CI resolves every dependency
+            # fresh inside its declared range, so a consumer-style install is what gets tested.
+            - run: rm pnpm-lock.yaml && pnpm install
+
+            - if: github.event_name == 'pull_request'
+              name: Lint commit messages
+              run: pnpm exec commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+
+            - run: pnpm format:check
+            - run: pnpm lint
+            - run: pnpm build
+            - run: pnpm typecheck
+            - run: pnpm test:coverage
+
+            - uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+              with:
+                  name: coverage
+                  path: coverage/

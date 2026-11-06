@@ -1,0 +1,60 @@
+{
+    "name": "ilc-packages",
+    "version": "0.0.0",
+    "description": "ILC packages: SDKs, adapters, helpers and the MCP server",
+    "private": true,
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/namecheap/ilc-packages.git"
+    },
+    "scripts": {
+        "build": "pnpm -r build",
+        "clean": "pnpm -r clean",
+        "test": "vitest run",
+        "test:watch": "vitest",
+        "test:coverage": "vitest run --coverage",
+        "typecheck": "tsc -b",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "format": "prettier --write .",
+        "format:check": "prettier --check .",
+        "changeset": "changeset",
+        "prepare": "husky"
+    },
+    "keywords": [
+        "ilc"
+    ],
+    "author": "Namecheap",
+    "license": "Apache-2.0",
+    "devEngines": {
+        "packageManager": {
+            "name": "pnpm",
+            "version": "12.16.1",
+            "onFail": "download"
+        }
+    },
+    "packageManager": "pnpm@12.16.1",
+    "type": "module",
+    "engines": {
+        "node": "^22"
+    },
+    "devDependencies": {
+        "@changesets/changelog-github": "^1.0.1",
+        "@changesets/cli": "^3.0.3",
+        "@commitlint/cli": "^21.2.4",
+        "@commitlint/config-conventional": "^21.2.4",
+        "@eslint/js": "^10.0.1",
+        "@types/node": "^22.19.0",
+        "@vitest/coverage-v8": "^5.0.5",
+        "@vitest/eslint-plugin": "^1.6.27",
+        "eslint": "^10.13.0",
+        "eslint-config-prettier": "^10.1.8",
+        "globals": "^17.13.0",
+        "husky": "^9.1.7",
+        "lint-staged": "^17.6.0",
+        "prettier": "^3.9.10",
+        "typescript": "^6.0.3",
+        "typescript-eslint": "^8.72.0",
+        "vitest": "^5.0.5"
+    }
+}

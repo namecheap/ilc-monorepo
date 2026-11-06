@@ -1,0 +1,28 @@
+packages:
+    - packages/*
+
+engineStrict: true
+
+blockExoticSubdeps: true
+# Versions published less than 2 weeks ago (in minutes) are not installed
+minimumReleaseAge: 20160
+trustPolicy: no-downgrade
+minimumReleaseAgeExclude:
+    - '@pnpm/exe.android-arm64@12.16.1'
+    - '@pnpm/exe.android-x64@12.16.1'
+    - '@pnpm/exe.darwin-arm64@12.16.1'
+    - '@pnpm/exe.darwin-x64@12.16.1'
+    - '@pnpm/exe.freebsd-x64@12.16.1'
+    - '@pnpm/exe.linux-arm64-musl@12.16.1'
+    - '@pnpm/exe.linux-arm64@12.16.1'
+    - '@pnpm/exe.linux-ppc64@12.16.1'
+    - '@pnpm/exe.linux-riscv64@12.16.1'
+    - '@pnpm/exe.linux-s390x@12.16.1'
+    - '@pnpm/exe.linux-x64-musl@12.16.1'
+    - '@pnpm/exe.linux-x64@12.16.1'
+    - '@pnpm/exe.win32-arm64@12.16.1'
+    - '@pnpm/exe.win32-x64@12.16.1'
+    - pnpm@12.16.1
+trustPolicyExclude:
+    # Older line released before the package moved to provenance publishing; needed by @types/node@22
+    - undici-types@6.21.0
