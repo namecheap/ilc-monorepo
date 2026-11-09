@@ -43,6 +43,7 @@ pnpm format:check
 - Tests live next to the code as `*.spec.ts` and use Vitest globals (`describe`, `it`, `expect`, `vi`). No imports from `vitest` are needed for those. Use `vi.fn` and `vi.spyOn` for mocks.
 - Formatting is Prettier with the repo config: 4 spaces, single quotes, trailing commas, 120 columns. Do not hand-format.
 - Lint is ESLint with typescript-eslint. Fix findings in code rather than adding disable comments. A disable comment needs a reason on the same line.
+- Don't expose any internal infra details like urls, credentials, plugins, etc
 
 ## Layout of a package
 

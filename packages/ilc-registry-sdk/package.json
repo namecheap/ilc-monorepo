@@ -1,9 +1,11 @@
 {
     "name": "ilc-registry-sdk",
     "version": "0.0.1",
-    "description": "SDK for the ILC registry API",
+    "description": "SDK for the ILC Registry API",
     "keywords": [
-        "ilc"
+        "ilc",
+        "ilc-registry",
+        "micro-frontends"
     ],
     "author": "Namecheap",
     "license": "Apache-2.0",
@@ -33,5 +35,8 @@
         "clean": "rm -rf dist",
         "test": "vitest run",
         "typecheck": "tsc -b"
+    },
+    "dependencies": {
+        "lzutf8": "^0.6.3"
     }
 }
