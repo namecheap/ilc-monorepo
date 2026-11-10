@@ -1,6 +1,6 @@
 import nock from 'nock';
 import urljoin from 'url-join';
-import * as sinon from 'sinon';
+import type { MockInstance } from 'vitest';
 import { RegistryApi } from '../../src/server/RegistryApi';
 import fakeCons from '../utils/console';
 import wait from '../utils/wait';
@@ -33,10 +33,10 @@ const allApps = [
 describe('RegistryApi', () => {
     let registryApi: RegistryApi;
     let scope: nock.Scope;
-    let stubCons: sinon.SinonStubbedInstance<Console>;
+    let warn: MockInstance<Console['warn']>;
 
     beforeEach(() => {
-        stubCons = sinon.stub(fakeCons);
+        warn = vi.spyOn(fakeCons, 'warn');
 
         scope = nock(registryOrigin).get('/api/v1/public/app_discovery').once().reply(200, allApps);
 
@@ -44,7 +44,7 @@ describe('RegistryApi', () => {
     });
 
     afterEach(() => {
-        (sinon as any).restoreObject(fakeCons);
+        vi.restoreAllMocks();
 
         nock.cleanAll();
         nock.enableNetConnect();
@@ -138,11 +138,10 @@ describe('RegistryApi', () => {
                 bar: 'bar1',
             });
             expect(apps).to.eql([allApps[1], allApps[2]]);
-            sinon.assert.callCount(stubCons.warn, 1);
-            sinon.assert.calledWith(
-                stubCons.warn,
-                sinon.match({
-                    error: sinon.match.instanceOf(Error).and(sinon.match.has('message', 'Foo error')),
+            expect(warn).toHaveBeenCalledTimes(1);
+            expect(warn).toHaveBeenCalledWith(
+                expect.objectContaining({
+                    error: expect.objectContaining({ message: 'Foo error' }),
                     message: `ILC registry (${urljoin(
                         registryOrigin,
                         '/api/v1/public/app_discovery',

@@ -1,6 +1,5 @@
 // @vitest-environment jsdom
 import { GlobalBrowserApi } from '../../src/app/GlobalBrowserApi';
-import sinon from 'sinon';
 import { AppLifecycleFnProps, ApplicationConfig, ApplicationKind, LifeCycleFn, LifeCycles } from '../../src/app';
 
 describe('GlobalBrowserApi', () => {
@@ -19,20 +18,24 @@ describe('GlobalBrowserApi', () => {
     };
 
     const app: LifeCycles<AppLifecycleFnProps> = {
-        bootstrap: sinon.stub(),
-        mount: sinon.stub(),
-        unmount: sinon.stub(),
+        bootstrap: vi.fn(async () => {}),
+        mount: vi.fn(async () => {}),
+        unmount: vi.fn(async () => {}),
     };
 
     beforeEach(() => {
         window.ILC = {
             navigate: () => 'navigate',
             importParcelFromApp: () =>
-                Promise.resolve({ bootstrap: sinon.stub(), mount: sinon.stub(), unmount: sinon.stub() }),
+                Promise.resolve({
+                    bootstrap: vi.fn(async () => {}),
+                    mount: vi.fn(async () => {}),
+                    unmount: vi.fn(async () => {}),
+                }),
             mountRootParcel: () => ({
-                mount: sinon.stub(),
-                unmount: sinon.stub(),
-                getStatus: sinon.stub(),
+                mount: vi.fn(),
+                unmount: vi.fn(),
+                getStatus: vi.fn(),
                 mountPromise: Promise.resolve(null),
                 loadPromise: Promise.resolve(null),
                 bootstrapPromise: Promise.resolve(null),

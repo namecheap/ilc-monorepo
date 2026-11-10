@@ -1,5 +1,5 @@
 import IlcSdk from '../../src/server/index';
-import * as sinon from 'sinon';
+import type { MockInstance } from 'vitest';
 import { Request as MockReq, MockRequestOptions, Response as MockRes } from 'mock-http';
 
 import defaultIntlAdapter from '../../src/app/defaultIntlAdapter';
@@ -13,17 +13,17 @@ const defReq = (): Omit<MockRequestOptions, 'headers'> & { headers: Record<strin
 
 describe('IlcSdk', () => {
     let ilcSdk: IlcSdk;
-    let stubCons: sinon.SinonStubbedInstance<Console>;
+    let warn: MockInstance<Console['warn']>;
 
     beforeEach(() => {
         process.env['ILC_APP_PUBLIC_PATH'] = '/';
-        stubCons = sinon.stub(fakeCons);
+        warn = vi.spyOn(fakeCons, 'warn');
         ilcSdk = new IlcSdk({ logger: fakeCons });
     });
 
     afterEach(() => {
         delete process.env['ILC_APP_PUBLIC_PATH'];
-        (sinon as any).restoreObject(fakeCons);
+        vi.restoreAllMocks();
     });
 
     describe('constructor options', () => {
@@ -49,8 +49,7 @@ describe('IlcSdk', () => {
                 const { requestData } = ilcSdk.processRequest(req);
 
                 expect(requestData.getCurrentReqHost()).to.eq('localhost');
-                sinon.assert.calledWith(
-                    stubCons.warn,
+                expect(warn).toHaveBeenCalledWith(
                     'Missing "x-request-host" information for "http://example.com/tst" request. Falling back to "localhost".',
                 );
             });
@@ -71,8 +70,7 @@ describe('IlcSdk', () => {
                 const { requestData } = ilcSdk.processRequest(req);
 
                 expect(requestData.getCurrentReqOriginalUri()).to.eq('/');
-                sinon.assert.calledWith(
-                    stubCons.warn,
+                expect(warn).toHaveBeenCalledWith(
                     'Missing "x-request-uri" information for "http://example.com/tst" request. Falling back to "/".',
                 );
             });
@@ -92,7 +90,7 @@ describe('IlcSdk', () => {
                 const { requestData } = ilcSdk.processRequest(req);
 
                 expect(requestData.appId).to.eq('testId');
-                sinon.assert.notCalled(stubCons.warn);
+                expect(warn).not.toHaveBeenCalled();
             });
 
             it('should fallback to dumb appId if not passed', () => {
@@ -100,9 +98,8 @@ describe('IlcSdk', () => {
                 const { requestData } = ilcSdk.processRequest(req);
 
                 expect(requestData.appId).to.eq('dumbId');
-                sinon.assert.calledTwice(stubCons.warn);
-                sinon.assert.calledWith(
-                    stubCons.warn,
+                expect(warn).toHaveBeenCalledTimes(2);
+                expect(warn).toHaveBeenCalledWith(
                     'Missing "appId" information for "http://example.com/tst" request. Falling back to dumb ID.',
                 );
             });
@@ -115,8 +112,7 @@ describe('IlcSdk', () => {
             expect(requestData.getCurrentPathProps()).to.eql({});
             expect(requestData.getCurrentBasePath()).to.eq('/');
             expect(requestData.getCurrentReqUrl()).to.eq('/');
-            sinon.assert.calledWith(
-                stubCons.warn,
+            expect(warn).toHaveBeenCalledWith(
                 'Missing "routerProps" for "http://example.com/tst" request. Fallback to / & /',
             );
         });
@@ -136,7 +132,7 @@ describe('IlcSdk', () => {
 
                 expect(requestData.getCurrentBasePath()).to.eq('/base/path/');
                 expect(requestData.getCurrentReqUrl()).to.eq('/a/b/c?a=1&b=a');
-                sinon.assert.notCalled(stubCons.warn);
+                expect(warn).not.toHaveBeenCalled();
             });
 
             it('without trailing slash', () => {
@@ -153,7 +149,7 @@ describe('IlcSdk', () => {
 
                 expect(requestData.getCurrentBasePath()).to.eq('/base/path');
                 expect(requestData.getCurrentReqUrl()).to.eq('/a/b/c?a=1&b=a');
-                sinon.assert.notCalled(stubCons.warn);
+                expect(warn).not.toHaveBeenCalled();
             });
         });
 

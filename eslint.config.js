@@ -97,14 +97,6 @@ export default tseslint.config(
         },
     },
     {
-        // Its tests still assert through sinon
-        files: ['packages/ilc-sdk/test/**/*.ts'],
-        plugins: { vitest },
-        rules: {
-            'vitest/expect-expect': ['error', { assertFunctionNames: ['expect', 'sinon.assert.*'] }],
-        },
-    },
-    {
         // Its source is injected verbatim into app bundles, so the console call is intended
         files: ['packages/ilc-sdk/src/app/utils/resolveDirectory.ts'],
         rules: { 'no-console': 'off' },

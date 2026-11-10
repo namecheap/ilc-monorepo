@@ -1,4 +1,3 @@
-import * as sinon from 'sinon';
 import { JSDOM } from 'jsdom';
 
 import { IntlAdapter, IntlAdapterConfig, RoutingStrategy } from '../../src/app/types';
@@ -17,7 +16,7 @@ const getAdapter = (currentConfig = currConfig): IntlAdapter => ({
 
 const getClientAdapter = (currentConfig = currConfig) => ({
     get: () => currentConfig,
-    set: sinon.spy(),
+    set: vi.fn(),
     config: baseConfig,
 });
 
@@ -38,7 +37,7 @@ describe('IlcIntl', () => {
 
             const newConf = { locale: 'es-MX', currency: 'USD' };
             intl.set(newConf);
-            sinon.assert.calledOnceWithExactly(adapter.set, newConf);
+            expect(adapter.set).toHaveBeenCalledExactlyOnceWith(newConf);
         });
 
         it('should handle options', () => {
@@ -51,38 +50,39 @@ describe('IlcIntl', () => {
             const adapter = getClientAdapter();
             const intl = new IlcIntl('tst', adapter);
 
-            const prepare = sinon.spy();
-            const execute = sinon.spy();
+            const prepare = vi.fn();
+            const execute = vi.fn();
 
             const unsubscribe = intl.onChange(prepare, execute);
 
             const detail = {
-                addHandler: sinon.spy(),
+                addHandler: vi.fn(),
             };
             window.dispatchEvent(new window.CustomEvent('ilc:intl-update', { detail }));
 
-            sinon.assert.calledOnceWithExactly(detail.addHandler, {
+            expect(detail.addHandler).toHaveBeenCalledExactlyOnceWith({
                 actorId: 'tst',
                 prepare,
                 execute,
             });
-            detail.addHandler.resetHistory();
+            detail.addHandler.mockClear();
 
             unsubscribe();
             window.dispatchEvent(new window.CustomEvent('ilc:intl-update', { detail }));
-            sinon.assert.notCalled(detail.addHandler);
+            expect(detail.addHandler).not.toHaveBeenCalled();
         });
 
         it('remove event listener on unmount', () => {
             const adapter = getClientAdapter();
             const intl = new IlcIntl('tst', adapter);
-            const spy = sinon.spy(window, 'removeEventListener');
-            const prepare = sinon.spy();
-            const execute = sinon.spy();
+            const spy = vi.spyOn(window, 'removeEventListener');
+            const prepare = vi.fn();
+            const execute = vi.fn();
 
             intl.onChange(prepare, execute);
             intl.unmount();
-            sinon.assert.calledOnce(spy);
+            expect(spy).toHaveBeenCalledOnce();
+            spy.mockRestore();
         });
     });
 
