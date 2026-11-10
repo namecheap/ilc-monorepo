@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { TtlCache } from '../../src/app/utils/TtlCache';
 import sinon from 'sinon';
 
@@ -39,7 +38,7 @@ describe('TtlCache', () => {
         wrappedFn(2);
         wrappedFn(2);
 
-        expect(fn.calledOnce).to.be.true;
+        expect(fn.calledOnce).toBe(true);
         expect(cache.get('key-2')).to.equal(4);
     });
 
@@ -49,7 +48,7 @@ describe('TtlCache', () => {
         expect(cache.get('key1')).to.equal(123);
         clock.tick(1001);
         clock.tick(500); // Trigger cleanup
-        expect(cache.get('key1')).to.be.undefined;
+        expect(cache.get('key1')).toBeUndefined();
     });
 
     it('should clear all values', () => {
@@ -57,19 +56,19 @@ describe('TtlCache', () => {
         cache.set('key1', 123);
         cache.set('key2', 456);
         cache.clear();
-        expect(cache.get('key1')).to.be.undefined;
-        expect(cache.get('key2')).to.be.undefined;
+        expect(cache.get('key1')).toBeUndefined();
+        expect(cache.get('key2')).toBeUndefined();
     });
 
     it('should destroy the cache', () => {
         const cache = new TtlCache<string, number>({ ttl: 1000, cleanupInterval: 500 });
         cache.set('key1', 123);
         cache.destroy();
-        expect(cache.get('key1')).to.be.undefined;
+        expect(cache.get('key1')).toBeUndefined();
         // Ensure cleanup interval is cleared
         clock.tick(1001);
         clock.tick(500); // Trigger cleanup
-        expect(cache.get('key1')).to.be.undefined;
+        expect(cache.get('key1')).toBeUndefined();
     });
 
     it('should not schedule cleanup if setTimeout is not available', () => {

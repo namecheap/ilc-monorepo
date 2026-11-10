@@ -1,8 +1,2 @@
-node_modules
-/dist
-/.idea
-/.nyc_output
-/coverage
 /docs
-.DS_Store
 test/fixtures/dist

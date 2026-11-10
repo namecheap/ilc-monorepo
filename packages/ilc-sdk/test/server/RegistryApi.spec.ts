@@ -1,14 +1,9 @@
-import chai from 'chai';
-import chaiAsPromised from 'chai-as-promised';
 import nock from 'nock';
 import urljoin from 'url-join';
 import * as sinon from 'sinon';
 import { RegistryApi } from '../../src/server/RegistryApi';
 import fakeCons from '../utils/console';
 import wait from '../utils/wait';
-
-chai.use(chaiAsPromised);
-const expect = chai.expect;
 
 const registryOrigin = 'http://registry';
 const allApps = [
@@ -64,10 +59,11 @@ describe('RegistryApi', () => {
     });
 
     describe('discoverApps', () => {
+        // eslint-disable-next-line vitest/expect-expect -- the @ts-expect-error lines are the assertions
         it('should show typing errors', async () => {
-            // @ts-expect-error
+            // @ts-expect-error query values must be strings
             await registryApi.discoverApps({ q: {} });
-            // @ts-expect-error
+            // @ts-expect-error query values must be strings
             await registryApi.discoverApps({ q: [] });
         });
 
@@ -155,7 +151,7 @@ describe('RegistryApi', () => {
             );
         });
 
-        it("should throw error if first fetching apps returned with error, since we don't have memoized data yet", () => {
+        it("should throw error if first fetching apps returned with error, since we don't have memoized data yet", async () => {
             // response with error
             nock.cleanAll();
             nock.enableNetConnect();
@@ -166,7 +162,7 @@ describe('RegistryApi', () => {
                 bar: 'bar1',
             });
 
-            chai.assert.isRejected(promise, Error, 'Foo error');
+            await expect(promise).rejects.toThrow('Foo error');
         });
     });
 });

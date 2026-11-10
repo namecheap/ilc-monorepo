@@ -1,18 +1,20 @@
 {
+    // Package-wide options; the project configs below extend this file.
+    "extends": "../../tsconfig.base.json",
     "compilerOptions": {
-        "target": "ES2019",
-        "module": "commonjs",
-        "declaration": true,
-        "strict": true,
-        "types": ["node", "mocha"],
-        "esModuleInterop": true,
-        "resolveJsonModule": true,
-        "skipLibCheck": true,
-        "forceConsistentCasingInFileNames": true
+        // Published as CommonJS: there is no `"type": "module"` in package.json, and this flag would
+        // force `import x = require()` syntax in CommonJS files.
+        "verbatimModuleSyntax": false,
+        // Not yet satisfied by the code that moved in from the ilc-sdk repo. Tighten in a follow-up.
+        "exactOptionalPropertyTypes": false,
+        "noUncheckedIndexedAccess": false,
+        "noUnusedLocals": false,
+        "noUnusedParameters": false
     },
-    "include": ["./**/*.ts"],
-    "exclude": ["node_modules", "**/__tests__/*"],
-    "ts-node": {
-        "files": true
-    }
+    "files": [],
+    "references": [
+        { "path": "./tsconfig.app.json" },
+        { "path": "./tsconfig.server.json" },
+        { "path": "./tsconfig.test.json" }
+    ]
 }

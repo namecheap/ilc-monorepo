@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import sinon from 'sinon';
 import { injectLoader } from '../../src/server/webpack-inject-plugin/loader';
 import { registry } from '../../src/server/webpack-inject-plugin/plugin';
@@ -41,7 +40,7 @@ describe('injectLoader', () => {
 
         const result = injectLoader.call(mockLoaderContext as any, source);
 
-        expect(mockFunc.calledOnceWithExactly(source)).to.be.true;
+        expect(mockFunc.calledOnceWithExactly(source)).toBe(true);
         expect(result).to.equal('processed source');
     });
 
@@ -59,8 +58,8 @@ describe('injectLoader', () => {
 
         await Promise.resolve(); // Wait for the promise to resolve
 
-        expect(mockFunc.calledOnceWithExactly(source)).to.be.true;
-        expect(asyncCallback.calledOnceWithExactly(null, 'processed async source')).to.be.true;
+        expect(mockFunc.calledOnceWithExactly(source)).toBe(true);
+        expect(asyncCallback.calledOnceWithExactly(null, 'processed async source')).toBe(true);
     });
 
     it('should handle asynchronous errors gracefully', async () => {
@@ -75,8 +74,8 @@ describe('injectLoader', () => {
 
         injectLoader.call(mockLoaderContext as any, source);
         await clock.runAllAsync();
-        expect(mockFunc.calledOnceWithExactly(source)).to.be.true;
-        expect(asyncCallback.calledOnce).to.be.true;
+        expect(mockFunc.calledOnceWithExactly(source)).toBe(true);
+        expect(asyncCallback.calledOnce).toBe(true);
         expect(asyncCallback.args[0][0]).to.be.an('error');
         expect(asyncCallback.args[0][0].message).to.equal('Async error');
     });
@@ -92,6 +91,6 @@ describe('injectLoader', () => {
 
         const result = injectLoader.call(mockLoaderContext as any, source);
 
-        expect(result).to.be.undefined;
+        expect(result).toBeUndefined();
     });
 });

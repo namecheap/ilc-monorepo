@@ -1,0 +1,13 @@
+{
+    // Browser entry point, published as `ilc-sdk/app`. Stays CommonJS: the package has no `"type": "module"`.
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "composite": true,
+        "target": "es2015",
+        "types": ["node"],
+        "rootDir": "src/app",
+        "outDir": "dist/app",
+        "tsBuildInfoFile": "dist/tsconfig.app.tsbuildinfo"
+    },
+    "include": ["src/app/**/*.ts"]
+}

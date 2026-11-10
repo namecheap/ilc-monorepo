@@ -26,3 +26,7 @@ minimumReleaseAgeExclude:
 trustPolicyExclude:
     # Older line released before the package moved to provenance publishing; needed by @types/node@22
     - undici-types@6.21.0
+
+# es5-ext (via memoizee in ilc-sdk) has a postinstall that only prints a message. Never needed.
+allowBuilds:
+    es5-ext: false

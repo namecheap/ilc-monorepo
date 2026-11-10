@@ -1,5 +1,4 @@
 import { IlcAppWrapperSdk } from '../../src/server';
-import { expect } from 'chai';
 import { Request as MockReq, Response as MockRes } from 'mock-http';
 
 import fakeCons from '../utils/console';
@@ -13,12 +12,12 @@ describe('IlcAppWrapperSdk', () => {
     let ilcSdk: IlcAppWrapperSdk;
 
     beforeEach(() => {
-        process.env.ILC_APP_PUBLIC_PATH = '/';
+        process.env['ILC_APP_PUBLIC_PATH'] = '/';
         ilcSdk = new IlcAppWrapperSdk({ logger: fakeCons });
     });
 
     afterEach(() => {
-        delete process.env.ILC_APP_PUBLIC_PATH;
+        delete process.env['ILC_APP_PUBLIC_PATH'];
     });
 
     describe('forwardRequest', () => {
@@ -30,10 +29,7 @@ describe('IlcAppWrapperSdk', () => {
             ilcSdk.forwardRequest(requestData, res);
 
             expect(res.statusCode).to.eql(210);
-            if (res.writableEnded !== undefined) {
-                // This var was introduced in Node.js 12 only
-                expect(res.writableEnded).to.be.true;
-            }
+            expect(res.writableEnded).toBe(true);
         });
 
         it('should send x-props-override header if necessary', () => {

@@ -1,9 +1,8 @@
 import IlcAppSdk, { ApplicationKind } from '../../src/app/index';
-import { expect } from 'chai';
 
 describe('IlcAppSdk', () => {
     it('should throw error due to not provided adapter', () => {
-        // @ts-ignore
+        // @ts-expect-error adapter argument is required
         expect(() => new IlcAppSdk()).to.throw('Unable to determine adapter properly...');
     });
 
@@ -18,9 +17,9 @@ describe('IlcAppSdk', () => {
             },
         });
 
-        expect(page404Rendered).to.be.false;
+        expect(page404Rendered).toBe(false);
         appSdk.render404();
-        expect(page404Rendered).to.be.true;
+        expect(page404Rendered).toBe(true);
     });
 
     it('should "unmount" throw error due to not defined set method in adapter', () => {

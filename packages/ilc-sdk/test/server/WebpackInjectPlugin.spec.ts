@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import path from 'path';
 import { ENTRY_ORDER, WebpackInjectPlugin, registry } from '../../src/server/webpack-inject-plugin/plugin';
 

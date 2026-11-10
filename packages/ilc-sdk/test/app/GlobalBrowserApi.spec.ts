@@ -1,4 +1,4 @@
-import { expect } from 'chai';
+// @vitest-environment jsdom
 import { GlobalBrowserApi } from '../../src/app/GlobalBrowserApi';
 import sinon from 'sinon';
 import { AppLifecycleFnProps, ApplicationConfig, ApplicationKind, LifeCycleFn, LifeCycles } from '../../src/app';
@@ -24,10 +24,7 @@ describe('GlobalBrowserApi', () => {
         unmount: sinon.stub(),
     };
 
-    let cleanup: Function;
-
     beforeEach(() => {
-        cleanup = require('jsdom-global')();
         window.ILC = {
             navigate: () => 'navigate',
             importParcelFromApp: () =>
@@ -50,14 +47,9 @@ describe('GlobalBrowserApi', () => {
             getSharedLibConfigByName: () => Promise.resolve([]),
             getSharedLibConfigByNameSync: () => [],
             getApplicationConfigByName: <T>() => Promise.resolve(appConfig as ApplicationConfig<T>),
-            unloadApp: (appId) => Promise.resolve(),
+            unloadApp: () => undefined,
         };
     });
-
-    /**
-     * https://github.com/rstacruz/jsdom-global/issues/61
-     */
-    // after(() => cleanup());
 
     it('navigate is correctly typed and callable', () => {
         const res = GlobalBrowserApi.navigate('aaa');
@@ -65,7 +57,7 @@ describe('GlobalBrowserApi', () => {
     });
 
     it('importParcelFromApp is correctly typed and callable', async () => {
-        // @ts-expect-error
+        // @ts-expect-error missing required argument
         await GlobalBrowserApi.importParcelFromApp('aaa');
 
         const res = await GlobalBrowserApi.importParcelFromApp('aaa', 'bbb');
@@ -77,11 +69,11 @@ describe('GlobalBrowserApi', () => {
     it('mountRootParcel is correctly typed and callable', async () => {
         const parcelConfig = await GlobalBrowserApi.importParcelFromApp('aaa', 'bbbb');
 
-        // @ts-expect-error
+        // @ts-expect-error wrong argument type
         GlobalBrowserApi.mountRootParcel(parcelConfig, {});
 
         GlobalBrowserApi.mountRootParcel(
-            // @ts-expect-error
+            // @ts-expect-error wrong argument type
             {},
             {
                 domElement: null,
@@ -114,7 +106,7 @@ describe('GlobalBrowserApi', () => {
         expect(res).to.deep.eq(app);
     });
     it('unloadApp is correctly typed and callable (no options arg)', async () => {
-        expect(GlobalBrowserApi.unloadApp('news_at_body')).to.be.fulfilled;
+        expect(GlobalBrowserApi.unloadApp('news_at_body')).toBeUndefined();
     });
     it('loadApp is correctly typed and callable (empty option arg)', async () => {
         const res = await GlobalBrowserApi.loadApp('@portal/news', {});

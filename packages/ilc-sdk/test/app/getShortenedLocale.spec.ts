@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import { getShortenedLocale } from '../../src/app/utils/getShortenedLocale';
 
 describe('getShortenedLocale', () => {

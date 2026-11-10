@@ -1,4 +1,3 @@
-import { expect } from 'chai';
 import * as sinon from 'sinon';
 import { JSDOM } from 'jsdom';
 
@@ -42,7 +41,7 @@ describe('IlcIntl', () => {
             sinon.assert.calledOnceWithExactly(adapter.set, newConf);
         });
 
-        it('should handle options ', () => {
+        it('should handle options', () => {
             const adapter = getClientAdapter();
             const intl = new IlcIntl('tst', adapter, { manifestPath: 'value' });
             expect(intl.getLocalisationManifestPath()).equal('value');
@@ -101,12 +100,6 @@ describe('IlcIntl', () => {
                 currency: 'USD',
                 locale: 'en-US',
             });
-        });
-
-        it('return undefined manifest path if not provided', () => {
-            const intl = new IlcIntl('tst');
-
-            expect(intl.getLocalisationManifestPath()).eql(undefined);
         });
 
         it('return undefined manifest path if not provided', () => {
@@ -248,7 +241,7 @@ describe('IlcIntl', () => {
             });
         });
 
-        it('returns locale with default culture when no culture present in the route', () => {
+        it('returns locale with the culture present in the route', () => {
             expect(IlcIntl.parseUrl(baseConfig, '/es-MX/tst')).to.eql({
                 cleanUrl: '/tst',
                 locale: 'es-MX',
@@ -341,15 +334,15 @@ describe('IlcIntl', () => {
         it('returns null when undefined locale passed', () => {
             const supportedLocales = ['en-US', 'ua-UA'];
 
-            expect(IlcIntl.getCanonicalLocale(undefined, supportedLocales)).to.be.null;
+            expect(IlcIntl.getCanonicalLocale(undefined, supportedLocales)).toBeNull();
         });
 
         it('returns null when unsupported locale passed', () => {
             const supportedLocales = ['en-US', 'ua-UA'];
 
-            expect(IlcIntl.getCanonicalLocale('br-BR', supportedLocales)).to.be.null;
-            expect(IlcIntl.getCanonicalLocale('zazazaz', supportedLocales)).to.be.null;
-            expect(IlcIntl.getCanonicalLocale('za-sddf-fdf', supportedLocales)).to.be.null;
+            expect(IlcIntl.getCanonicalLocale('br-BR', supportedLocales)).toBeNull();
+            expect(IlcIntl.getCanonicalLocale('zazazaz', supportedLocales)).toBeNull();
+            expect(IlcIntl.getCanonicalLocale('za-sddf-fdf', supportedLocales)).toBeNull();
         });
 
         it('adds culture when necessary using the one that goes first in the list', () => {

@@ -1,0 +1,9 @@
+{
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "noEmit": true,
+        "types": ["node", "vitest/globals"]
+    },
+    "include": ["test/**/*.ts", "src/app/window.d.ts", "vitest.config.mts"],
+    "references": [{ "path": "./tsconfig.app.json" }, { "path": "./tsconfig.server.json" }]
+}

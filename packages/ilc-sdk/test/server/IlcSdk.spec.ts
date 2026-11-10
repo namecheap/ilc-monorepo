@@ -1,5 +1,4 @@
 import IlcSdk from '../../src/server/index';
-import { expect } from 'chai';
 import * as sinon from 'sinon';
 import { Request as MockReq, MockRequestOptions, Response as MockRes } from 'mock-http';
 
@@ -17,13 +16,13 @@ describe('IlcSdk', () => {
     let stubCons: sinon.SinonStubbedInstance<Console>;
 
     beforeEach(() => {
-        process.env.ILC_APP_PUBLIC_PATH = '/';
+        process.env['ILC_APP_PUBLIC_PATH'] = '/';
         stubCons = sinon.stub(fakeCons);
         ilcSdk = new IlcSdk({ logger: fakeCons });
     });
 
     afterEach(() => {
-        delete process.env.ILC_APP_PUBLIC_PATH;
+        delete process.env['ILC_APP_PUBLIC_PATH'];
         (sinon as any).restoreObject(fakeCons);
     });
 
@@ -230,7 +229,7 @@ describe('IlcSdk', () => {
             const res = new MockRes();
 
             const { processResponse } = ilcSdk.processRequest(req);
-            processResponse(res);
+            expect(() => processResponse(res)).not.toThrow();
         });
 
         it('should set page title', () => {
@@ -328,7 +327,7 @@ describe('IlcSdk', () => {
             it('should handle relative URLs', () => {
                 const req = new MockReq(defReq());
                 const res = new MockRes();
-                process.env.TEST_ENV = 'tst.com';
+                process.env['TEST_ENV'] = 'tst.com';
 
                 const ilcSdk = new IlcSdk({ logger: fakeCons });
 
