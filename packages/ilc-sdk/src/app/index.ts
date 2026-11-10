@@ -50,9 +50,6 @@ export * from './GlobalBrowserApi';
 export * from './IlcIntl';
 export * from './utils/isSpecialUrl';
 
-/**
- * @name IlcAppSdk
- */
 export default class IlcAppSdk implements IIlcAppSdk {
     public intl: IlcIntl;
     /** Unique application ID, if same app will be rendered twice on a page - it will get different IDs */

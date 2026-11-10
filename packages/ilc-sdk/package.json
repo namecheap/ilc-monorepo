@@ -33,7 +33,8 @@
     },
     "scripts": {
         "build": "tsc -b tsconfig.server.json",
-        "clean": "rm -rf dist test/fixtures/dist",
+        "clean": "rm -rf dist docs test/fixtures/dist",
+        "docs": "typedoc",
         "test": "vitest run",
         "typecheck": "tsc -b"
     },
@@ -56,6 +57,9 @@
         "mock-http": "^1.1.0",
         "nock": "^13.5.5",
         "sinon": "^17.0.1",
+        "typedoc": "^0.28.20",
+        "typedoc-plugin-missing-exports": "^4.1.4",
+        "typedoc-plugin-rename-defaults": "^0.7.3",
         "webpack": "^5.111.1"
     }
 }

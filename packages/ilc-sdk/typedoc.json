@@ -1,30 +1,17 @@
 {
-    "plugin": ["typedoc-plugin-rename-defaults", "typedoc-plugin-missing-exports", "@knodes/typedoc-plugin-pages"],
+    "$schema": "https://typedoc.org/schema.json",
+    "plugin": ["typedoc-plugin-rename-defaults", "typedoc-plugin-missing-exports"],
+    "tsconfig": "tsconfig.typedoc.json",
     "entryPointStrategy": "expand",
     "entryPoints": ["./src/server/index.ts", "./src/app/index.ts"],
-    "includes": "./doc/",
+    "projectDocuments": [
+        "./doc/ilc_app_interface.md",
+        "./doc/global_api.md",
+        "./doc/registry_api.md",
+        "./doc/public_path.md"
+    ],
     "out": "docs",
     "excludePrivate": true,
     "excludeInternal": true,
-    "excludeExternals": true,
-    "pluginPages": {
-        "pages": [
-            {
-                "name": "ILC to App interface",
-                "source": "./doc/ilc_app_interface.md"
-            },
-            {
-                "name": "ILC Global API",
-                "source": "./doc/global_api.md"
-            },
-            {
-                "name": "ILC Registry API",
-                "source": "./doc/registry_api.md"
-            },
-            {
-                "name": "Public Path Problem",
-                "source": "./doc/public_path.md"
-            }
-        ]
-    }
+    "excludeExternals": true
 }

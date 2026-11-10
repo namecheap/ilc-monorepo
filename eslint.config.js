@@ -11,6 +11,7 @@ export default tseslint.config(
         ignores: [
             '**/dist/**',
             '**/coverage/**',
+            '**/docs/**',
             '**/node_modules/**',
             '.changeset/**',
             // Two-line CommonJS shims that make `ilc-sdk/app` resolve

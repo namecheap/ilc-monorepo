@@ -1,0 +1,9 @@
+{
+    // One program over both entry points for typedoc; nothing is emitted.
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "noEmit": true,
+        "types": ["node"]
+    },
+    "include": ["src/**/*.ts"]
+}
