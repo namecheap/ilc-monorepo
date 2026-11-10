@@ -13,20 +13,20 @@ $ npm i ilc-sdk
 
 ## Documentation
 
-- JS docs https://namecheap.github.io/ilc-sdk/
+- JS docs https://namecheap.github.io/ilc-packages/ilc-sdk/
 - Additional materials
-    - [ILC to App interface](https://namecheap.github.io/ilc-sdk/pages/Pages/ilc_app_interface.html)
-    - [ILC Global API](https://namecheap.github.io/ilc-sdk/pages/Pages/global_api.html)
-    - [Registry API](https://namecheap.github.io/ilc-sdk/pages/Pages/registry_api.html)
-    - [Public Path Problem](https://namecheap.github.io/ilc-sdk/pages/Pages/public_path.html)
+    - [ILC to App interface](https://namecheap.github.io/ilc-packages/ilc-sdk/documents/ilc_app_interface.html)
+    - [ILC Global API](https://namecheap.github.io/ilc-packages/ilc-sdk/documents/global_api.html)
+    - [Registry API](https://namecheap.github.io/ilc-packages/ilc-sdk/documents/registry_api.html)
+    - [Public Path Problem](https://namecheap.github.io/ilc-packages/ilc-sdk/documents/public_path.html)
 
 ## Node.js and App entrypoints
 
 This package features 2 bundles that are intended to be used in Node.js app that runs SSR bundle of your app and
 the application itself.
 
-- Node.js server bundle - [documentation](https://namecheap.github.io/ilc-sdk/modules/server.html)
-- Application bundle - [documentation](https://namecheap.github.io/ilc-sdk/modules/app.html)
+- Node.js server bundle - [documentation](https://namecheap.github.io/ilc-packages/ilc-sdk/modules/server.html)
+- Application bundle - [documentation](https://namecheap.github.io/ilc-packages/ilc-sdk/modules/app.html)
 
 ## Contribution
 

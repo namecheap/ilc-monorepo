@@ -82,6 +82,14 @@ The release workflow publishes with [npm trusted publishing](https://docs.npmjs.
 
 From then on the workflow publishes that package with provenance attestations.
 
+## Docs
+
+The Docs workflow builds the API reference of every package that has a `docs` script and publishes the result to GitHub Pages at `https://namecheap.github.io/ilc-packages/<package>/`. It runs on every push to `master` that touches `packages/`, and can be started by hand from the Actions tab. It deploys with the GitHub Pages actions through OIDC, so it needs no token.
+
+To give a package docs, add a `docs` script that writes to `docs/` inside the package, as `ilc-sdk` does with typedoc, and ignore that folder in git. The workflow picks it up on the next run.
+
+One-time setup: in the repository settings under Pages, set the source to GitHub Actions.
+
 ## Adding a package
 
 1. Create `packages/<name>` with a `package.json`, `tsconfig.json`, `tsconfig.lib.json`, `tsconfig.test.json`, `vitest.config.ts`, `src/index.ts` and a `README.md`. Copy them from `packages/ilc-registry-sdk` and change the names.
