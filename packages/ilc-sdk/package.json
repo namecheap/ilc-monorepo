@@ -18,10 +18,12 @@
         "url": "git+https://github.com/namecheap/ilc-packages.git",
         "directory": "packages/ilc-sdk"
     },
+    "type": "commonjs",
     "main": "dist/server/index.js",
     "types": "dist/server/index.d.ts",
     "files": [
         "dist",
+        "!dist/*.tsbuildinfo",
         "app.js",
         "app.d.ts"
     ],

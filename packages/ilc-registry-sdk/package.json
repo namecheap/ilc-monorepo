@@ -22,7 +22,8 @@
         }
     },
     "files": [
-        "dist"
+        "dist",
+        "!dist/*.tsbuildinfo"
     ],
     "engines": {
         "node": "^22"
