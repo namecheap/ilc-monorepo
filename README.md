@@ -59,6 +59,14 @@ pnpm --filter ilc-registry-sdk test
 
 Changes that touch no published code, such as docs or CI, need no changeset.
 
+When a change touches `package.json` fields that shape the published package, such as `exports`, `files`, `main` or `types`, check the tarball before opening the pull request:
+
+```sh
+pnpm check:publish
+```
+
+It builds, packs every package the way a release does, and runs [publint](https://publint.dev) and [arethetypeswrong](https://arethetypeswrong.github.io) on each tarball. Per-package arethetypeswrong settings live in `packages/<name>/.attw.json`.
+
 ## Releasing
 
 Releases are cut from `master` by the release workflow.
