@@ -224,7 +224,7 @@ export class IlcSdk {
 
         if (routerProps.basePath && routerProps.reqUrl) {
             res.basePageUrl = routerProps.basePath;
-            res.requestUrl = urljoin('/', routerProps.reqUrl.replace(routerProps.basePath, ''));
+            res.requestUrl = '/' + routerProps.reqUrl.replace(routerProps.basePath, '').replace(/^\/+/, '');
         } else {
             this.log.warn(`Missing "routerProps" for "${url.href}" request. Fallback to / & /`);
         }
