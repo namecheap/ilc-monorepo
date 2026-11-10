@@ -50,7 +50,7 @@ export * from './GlobalBrowserApi';
 export * from './IlcIntl';
 export * from './utils/isSpecialUrl';
 
-export default class IlcAppSdk implements IIlcAppSdk {
+export class IlcAppSdk implements IIlcAppSdk {
     public intl: IlcIntl;
     /** Unique application ID, if same app will be rendered twice on a page - it will get different IDs */
     public appId: string;
@@ -89,3 +89,5 @@ export default class IlcAppSdk implements IIlcAppSdk {
         this.intl.unmount();
     }
 }
+
+export default IlcAppSdk;

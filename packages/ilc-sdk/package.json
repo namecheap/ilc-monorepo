@@ -21,6 +21,16 @@
     "type": "commonjs",
     "main": "dist/server/index.js",
     "types": "dist/server/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/server/index.d.ts",
+            "default": "./dist/server/index.js"
+        },
+        "./app": {
+            "types": "./dist/app/index.d.ts",
+            "default": "./dist/app/index.js"
+        }
+    },
     "files": [
         "dist",
         "!dist/*.tsbuildinfo",

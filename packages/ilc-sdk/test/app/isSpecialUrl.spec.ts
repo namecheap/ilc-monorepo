@@ -1,4 +1,4 @@
-import { isSpecialUrl } from '../../app';
+import { isSpecialUrl } from '../../src/app';
 
 describe('isSpecialUrl', () => {
     it('should return true for special URLs', () => {
