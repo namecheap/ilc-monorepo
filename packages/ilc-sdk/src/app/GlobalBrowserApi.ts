@@ -1,0 +1,113 @@
+import { LifeCycles } from './interfaces/LifeCycles';
+import { ParcelLifecycleFnProps } from './interfaces/ParcelLifecycleFnProps';
+import { MountParcel } from './interfaces/MountParcel';
+import { GetAllSharedLibNames } from './interfaces/GetAllSharedLibNames';
+import { AppLifecycleFnProps, AppWrapperLifecycleFnProps, ApplicationConfig } from './types';
+
+/**
+ * ILC exposes some utility APIs globally at `window.ILC`. Here we provide convenience typings to use with typescript.
+ *
+ * @example
+ * ```
+ * import { GlobalBrowserApi } from 'ilc-sdk/app';
+ *
+ * GlobalBrowserApi.navigate('/mypath');
+ * ```
+ */
+export class GlobalBrowserApi {
+    /**
+     * Can be used for programmatic route change at simple apps.
+     * Localization of the URL will be done automatically.
+     */
+    static navigate(urlWithoutLocale: string): void {
+        return window.ILC.navigate(urlWithoutLocale);
+    }
+
+    /**
+     * Allows to fetch Parcel from the application and inject it with ILC specific configuration.
+     *
+     * @example
+     * ```javascript
+     * import Parcel from 'single-spa-react/parcel';
+     *
+     * <Parcel
+     * config={() => ILC.importParcelFromApp('@portal/people', 'person')}
+     * wrapWith="div"
+     * prop1="value1"
+     * />
+     * ```
+     */
+    static importParcelFromApp<ExtraProps = {}>(
+        appName: string,
+        parcelName: string,
+    ): Promise<LifeCycles<ParcelLifecycleFnProps<ExtraProps>>> {
+        return window.ILC.importParcelFromApp(appName, parcelName);
+    }
+
+    /**
+     * Will create and mount a single-spa parcel. See [details here](https://single-spa.js.org/docs/api/#mountrootparcel).
+     *
+     * @example
+     * ```javascript
+     * const parcel = ILC.mountRootParcel(() => ILC.importParcelFromApp('@portal/people', 'person'), {
+     *  prop1: 'value1',
+     *  domElement: document.getElementById('a-div'),
+     * });
+     * ```
+     */
+    static mountRootParcel: MountParcel = (parcelConfig, parcelProps) => {
+        return window.ILC.mountRootParcel(parcelConfig, parcelProps);
+    };
+
+    /**
+     * Will return names of all registered shared libraries in ILC-Registry
+     *
+     * @example
+     * ```javascript
+     * const sharedLibNames = await ILC.getAllSharedLibNames();
+     * ```
+     */
+    static getAllSharedLibNames: GetAllSharedLibNames = () => {
+        return window.ILC.getAllSharedLibNames();
+    };
+
+    static loadApp<T>(
+        name: string,
+        options?: { injectGlobalCss?: boolean },
+    ): Promise<T & LifeCycles<AppLifecycleFnProps | AppWrapperLifecycleFnProps | ParcelLifecycleFnProps>> {
+        return window.ILC.loadApp(name, options);
+    }
+
+    static unloadApp(appId: string): void {
+        return window.ILC.unloadApp(appId);
+    }
+
+    static getApplicationConfig<T extends object>(name: string): Promise<ApplicationConfig<T> | undefined> {
+        return window.ILC.getApplicationConfigByName(name);
+    }
+
+    static isIlcEnvironment(): boolean {
+        return Boolean(typeof window !== 'undefined' && window.ILC);
+    }
+
+    /**
+     * Returns the A/B experiment assignments ILC resolved for the current page, e.g. `{ 'homepage-hero': 'variant-b' }`.
+     * It is the same map ILC passes to route apps as `appProps.experiments`, so apps that ILC does not mount
+     * for a route (embedded apps, parcels, wrapper apps) render the same variant as the rest of the page.
+     * The map is frozen and changes only on the next full page load; `{}` means the visitor has no assignments.
+     *
+     * Returns `undefined` outside ILC, or when the running ILC version does not provide the assignments yet.
+     *
+     * @example
+     * ```javascript
+     * const variant = GlobalBrowserApi.getExperiments()?.['homepage-hero'];
+     * ```
+     */
+    static getExperiments(): Readonly<Record<string, string>> | undefined {
+        if (!GlobalBrowserApi.isIlcEnvironment() || typeof window.ILC.getExperiments !== 'function') {
+            return undefined;
+        }
+
+        return window.ILC.getExperiments();
+    }
+}
