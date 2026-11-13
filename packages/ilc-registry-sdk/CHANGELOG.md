@@ -1,5 +1,12 @@
 # ilc-registry-sdk
 
+## 0.2.0
+
+### Minor Changes
+
+- [#7](https://github.com/namecheap/ilc-packages/pull/7) [`8b10757`](https://github.com/namecheap/ilc-packages/commit/8b107572d3fb5df56f21866448da48b582f68f11) Thanks [@stas-nc](https://github.com/stas-nc)! - Add `auth: { type: 'bearer', token }`, which sends a composed Registry bearer token (`base64(id):base64(secret)`) as
+  is, for a caller that is given the token and never the auth entity.
+
 ## 0.1.0
 
 ### Minor Changes
