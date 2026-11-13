@@ -14,6 +14,13 @@ describe('resolveAuth', () => {
         expect(strategy.headers['Authorization']).toBe(`Bearer ${Buffer.from('ключ').toString('base64')}:cw==`);
     });
 
+    it('sends a composed bearer token as is', () => {
+        const strategy = resolveAuth({ type: 'bearer', token: 'cm9vdF9hcGlfdG9rZW4=:dG9rZW5fc2VjcmV0' });
+
+        expect(strategy.credentials).toBe('omit');
+        expect(strategy.headers).toEqual({ Authorization: 'Bearer cm9vdF9hcGlfdG9rZW4=:dG9rZW5fc2VjcmV0' });
+    });
+
     it('relies on the browser cookies only for a session', () => {
         const strategy = resolveAuth({ type: 'session' });
 
