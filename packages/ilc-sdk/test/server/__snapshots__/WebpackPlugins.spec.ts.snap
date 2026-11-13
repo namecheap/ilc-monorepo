@@ -1,0 +1,196 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`WebpackPluginsFactory > should generate client bundle (default) 1`] = `
+"(function(define){const __ilc_script_url__ = document.currentScript.src;
+System.register([], function(__WEBPACK_DYNAMIC_EXPORT__, __system_context__) {
+
+
+	return {
+
+		execute: function() {
+			__WEBPACK_DYNAMIC_EXPORT__(
+/******/ (() => { // webpackBootstrap
+/******/ 	// The require scope
+/******/ 	const __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+let __webpack_exports__ = {};
+function resolveDirectory(urlString, rootDirectoryLevel = 1) {
+	// Our friend IE11 doesn't support new URL()
+	// https://github.com/single-spa/single-spa/issues/612
+	// https://gist.github.com/jlong/2428561
+	const a = document.createElement("a");
+	a.href = urlString;
+	/* istanbul ignore next */
+	const pathname = a.pathname[0] === "/" ? a.pathname : "/" + a.pathname;
+	let numDirsProcessed = 0;
+	let index = pathname.length;
+	while (numDirsProcessed !== rootDirectoryLevel && index >= 0) {
+		const char = pathname[--index];
+		if (char === "/") {
+			numDirsProcessed++;
+		}
+	};
+	if (numDirsProcessed !== rootDirectoryLevel) {
+		// tslint:disable-next-line:no-console
+		console.warn("ilc-webpack-plugins: rootDirectoryLevel (" + rootDirectoryLevel + ") is greater than the number of directories (" + numDirsProcessed + ") in the URL path " + urlString);
+	};
+	const finalPath = pathname.slice(0, index + 1) || "/";
+	return a.protocol + "//" + a.host + finalPath;
+}
+__webpack_require__.p  = resolveDirectory(__ilc_script_url__, 1);
+console.log('TEST MODULE');
+
+/******/ 	return __webpack_exports__;
+/******/ })()
+
+			);
+		}
+	};
+});
+})((window.ILC && window.ILC.define) || window.define);"
+`;
+
+exports[`WebpackPluginsFactory > should generate client bundle (no public path) 1`] = `
+"(function(define){const __ilc_script_url__ = document.currentScript.src;
+System.register([], function(__WEBPACK_DYNAMIC_EXPORT__, __system_context__) {
+
+
+	return {
+
+		execute: function() {
+			__WEBPACK_DYNAMIC_EXPORT__(
+/******/ (() => { // webpackBootstrap
+let __webpack_exports__ = {};
+console.log('TEST MODULE');
+
+/******/ 	return __webpack_exports__;
+/******/ })()
+
+			);
+		}
+	};
+});
+})((window.ILC && window.ILC.define) || window.define);"
+`;
+
+exports[`WebpackPluginsFactory > should generate client bundle (rootDirectoryLevel) 1`] = `
+"(function(define){const __ilc_script_url__ = document.currentScript.src;
+System.register([], function(__WEBPACK_DYNAMIC_EXPORT__, __system_context__) {
+
+
+	return {
+
+		execute: function() {
+			__WEBPACK_DYNAMIC_EXPORT__(
+/******/ (() => { // webpackBootstrap
+/******/ 	// The require scope
+/******/ 	const __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+let __webpack_exports__ = {};
+function resolveDirectory(urlString, rootDirectoryLevel = 1) {
+	// Our friend IE11 doesn't support new URL()
+	// https://github.com/single-spa/single-spa/issues/612
+	// https://gist.github.com/jlong/2428561
+	const a = document.createElement("a");
+	a.href = urlString;
+	/* istanbul ignore next */
+	const pathname = a.pathname[0] === "/" ? a.pathname : "/" + a.pathname;
+	let numDirsProcessed = 0;
+	let index = pathname.length;
+	while (numDirsProcessed !== rootDirectoryLevel && index >= 0) {
+		const char = pathname[--index];
+		if (char === "/") {
+			numDirsProcessed++;
+		}
+	};
+	if (numDirsProcessed !== rootDirectoryLevel) {
+		// tslint:disable-next-line:no-console
+		console.warn("ilc-webpack-plugins: rootDirectoryLevel (" + rootDirectoryLevel + ") is greater than the number of directories (" + numDirsProcessed + ") in the URL path " + urlString);
+	};
+	const finalPath = pathname.slice(0, index + 1) || "/";
+	return a.protocol + "//" + a.host + finalPath;
+}
+__webpack_require__.p  = resolveDirectory(__ilc_script_url__, 2);
+console.log('TEST MODULE');
+
+/******/ 	return __webpack_exports__;
+/******/ })()
+
+			);
+		}
+	};
+});
+})((window.ILC && window.ILC.define) || window.define);"
+`;
+
+exports[`WebpackPluginsFactory > should generate server bundle (default) 1`] = `
+"/******/ (() => { // webpackBootstrap
+/******/ 	// The require scope
+/******/ 	const __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+let __webpack_exports__ = {};
+
+        const pp = \`\${process.env.ILC_APP_PUBLIC_PATH}\`;
+        if (!pp) {
+            throw new Error('IlcSdk: Unable to determine public path of the application');
+        }
+        __webpack_require__.p  = pp;
+console.log('TEST MODULE');
+
+module.exports = __webpack_exports__;
+/******/ })()
+;"
+`;
+
+exports[`WebpackPluginsFactory > should generate server bundle (no public path) 1`] = `
+"/******/ (() => { // webpackBootstrap
+let __webpack_exports__ = {};
+console.log('TEST MODULE');
+
+module.exports = __webpack_exports__;
+/******/ })()
+;"
+`;
+
+exports[`WebpackPluginsFactory > should generate server bundle (rootDirectoryLevel) 1`] = `
+"/******/ (() => { // webpackBootstrap
+/******/ 	// The require scope
+/******/ 	const __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+let __webpack_exports__ = {};
+
+        const pp = \`\${process.env.ILC_APP_PUBLIC_PATH}\`;
+        if (!pp) {
+            throw new Error('IlcSdk: Unable to determine public path of the application');
+        }
+        __webpack_require__.p  = pp;
+console.log('TEST MODULE');
+
+module.exports = __webpack_exports__;
+/******/ })()
+;"
+`;
+
+exports[`WebpackPluginsFactory > should generate server bundle (ssrPublicPath) 1`] = `
+"/******/ (() => { // webpackBootstrap
+/******/ 	// The require scope
+/******/ 	const __webpack_require__ = {};
+/******/ 	
+/************************************************************************/
+let __webpack_exports__ = {};
+
+        const pp = \`ssr-path\`;
+        if (!pp) {
+            throw new Error('IlcSdk: Unable to determine public path of the application');
+        }
+        __webpack_require__.p  = pp;
+console.log('TEST MODULE');
+
+module.exports = __webpack_exports__;
+/******/ })()
+;"
+`;

@@ -2,9 +2,10 @@
 
 Libraries, SDKs and helpers for [ILC](https://github.com/namecheap/ilc). Each package is versioned and published to npm on its own.
 
-| Package                                         | Description                      | npm                                                                                                     |
-| ----------------------------------------------- | -------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| [`ilc-registry-sdk`](packages/ilc-registry-sdk) | Client for the ILC registry API. | [![npm](https://img.shields.io/npm/v/ilc-registry-sdk)](https://www.npmjs.com/package/ilc-registry-sdk) |
+| Package                                         | Description                       | npm                                                                                                     |
+| ----------------------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| [`ilc-registry-sdk`](packages/ilc-registry-sdk) | Client for the ILC registry API.  | [![npm](https://img.shields.io/npm/v/ilc-registry-sdk)](https://www.npmjs.com/package/ilc-registry-sdk) |
+| [`ilc-sdk`](packages/ilc-sdk)                   | SDK for app development with ILC. | [![npm](https://img.shields.io/npm/v/ilc-sdk)](https://www.npmjs.com/package/ilc-sdk)                   |
 
 ## Quick start
 
@@ -58,6 +59,14 @@ pnpm --filter ilc-registry-sdk test
 
 Changes that touch no published code, such as docs or CI, need no changeset.
 
+When a change touches `package.json` fields that shape the published package, such as `exports`, `files`, `main` or `types`, check the tarball before opening the pull request:
+
+```sh
+pnpm check:publish
+```
+
+It builds, packs every package the way a release does, and runs [publint](https://publint.dev) and [arethetypeswrong](https://arethetypeswrong.github.io) on each tarball. Per-package arethetypeswrong settings live in `packages/<name>/.attw.json`.
+
 ## Releasing
 
 Releases are cut from `master` by the release workflow.
@@ -80,6 +89,14 @@ The release workflow publishes with [npm trusted publishing](https://docs.npmjs.
 2. On the package page, under Settings, add a trusted publisher of type GitHub Actions with organization `namecheap`, repository `ilc-packages`, workflow `release.yml` and environment `npm_publish`.
 
 From then on the workflow publishes that package with provenance attestations.
+
+## Docs
+
+The Docs workflow builds the API reference of every package that has a `docs` script and publishes the result to GitHub Pages at `https://namecheap.github.io/ilc-packages/<package>/`. It runs on every push to `master` that touches `packages/`, and can be started by hand from the Actions tab. It deploys with the GitHub Pages actions through OIDC, so it needs no token.
+
+To give a package docs, add a `docs` script that writes to `docs/` inside the package, as `ilc-sdk` does with typedoc, and ignore that folder in git. The workflow picks it up on the next run.
+
+One-time setup: in the repository settings under Pages, set the source to GitHub Actions.
 
 ## Adding a package
 

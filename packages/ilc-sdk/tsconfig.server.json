@@ -1,0 +1,15 @@
+{
+    // Node entry point, published as `ilc-sdk`. Builds the app project first through the reference.
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "composite": true,
+        "target": "es2019",
+        "resolveJsonModule": true,
+        "types": ["node"],
+        "rootDir": "src/server",
+        "outDir": "dist/server",
+        "tsBuildInfoFile": "dist/tsconfig.server.tsbuildinfo"
+    },
+    "include": ["src/server/**/*.ts"],
+    "references": [{ "path": "./tsconfig.app.json" }]
+}

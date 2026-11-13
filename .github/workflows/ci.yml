@@ -39,9 +39,14 @@ jobs:
             # fresh inside its declared range, so a consumer-style install is what gets tested.
             - run: rm pnpm-lock.yaml && pnpm install
 
+            # Only commits made on the branch are linted. A package imported with its history arrives
+            # through the second parent of a merge commit, and that history predates the convention.
             - if: github.event_name == 'pull_request'
               name: Lint commit messages
-              run: pnpm exec commitlint --from ${{ github.event.pull_request.base.sha }} --to ${{ github.event.pull_request.head.sha }} --verbose
+              run: |
+                  for sha in $(git rev-list --reverse --first-parent ${{ github.event.pull_request.base.sha }}..${{ github.event.pull_request.head.sha }}); do
+                      git log -1 --format=%B "$sha" | pnpm exec commitlint --verbose
+                  done
 
             - run: pnpm format:check
             - run: pnpm lint

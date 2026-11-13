@@ -6,7 +6,7 @@ Read this before changing anything in the repo. The README has the human-facing 
 
 - Package manager is pnpm 12 only. Run tools with `pnpm exec <tool>`, never with `npx`, and add dependencies with `pnpm add`. Root dev dependencies take `-w`, package dependencies take `--filter <package>`.
 - Node 22. Do not use APIs newer than Node 22 in published code.
-- Packages are ESM (`"type": "module"`) compiled with `module: nodenext`. Relative imports inside a package need the `.js` extension, as in `import { x } from './x.js'`.
+- Packages are ESM (`"type": "module"`) compiled with `module: nodenext`. Relative imports inside a package need the `.js` extension, as in `import { x } from './x.js'`. A package whose consumers still `require()` it stays CommonJS by leaving `"type": "module"` out of its package.json and setting `verbatimModuleSyntax: false` in its tsconfig; `ilc-sdk` is one. Relative imports in such a package take no extension.
 - Never run `tsc --init` anywhere in the repo. It overwrites `tsconfig.json`. The root `tsconfig.json` is a solution file with `files: []` and a `references` list, and the compiler options live in `tsconfig.base.json`.
 - Do not add Nx, Turborepo, Lerna or semantic-release. Releases are Changesets, task running is pnpm.
 

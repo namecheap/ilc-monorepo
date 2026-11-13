@@ -1,0 +1,17 @@
+{
+    "$schema": "https://typedoc.org/schema.json",
+    "plugin": ["typedoc-plugin-rename-defaults", "typedoc-plugin-missing-exports"],
+    "tsconfig": "tsconfig.typedoc.json",
+    "entryPointStrategy": "expand",
+    "entryPoints": ["./src/server/index.ts", "./src/app/index.ts"],
+    "projectDocuments": [
+        "./doc/ilc_app_interface.md",
+        "./doc/global_api.md",
+        "./doc/registry_api.md",
+        "./doc/public_path.md"
+    ],
+    "out": "docs",
+    "excludePrivate": true,
+    "excludeInternal": true,
+    "excludeExternals": true
+}
