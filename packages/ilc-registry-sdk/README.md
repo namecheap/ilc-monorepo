@@ -62,10 +62,14 @@ When no cookies can be produced, the call throws a `RegistryError` whose `code` 
 
 `auth` is plain data; its `type` picks the strategy:
 
-| `auth`                          | For                                                   | What it does                                            |
-| ------------------------------- | ----------------------------------------------------- | ------------------------------------------------------- |
-| `{ type: 'token', id, secret }` | scripts and services with a Registry auth entity      | Sends them as the Registry's bearer token, no cookies.  |
-| `{ type: 'session' }`           | code running in the browser, next to a Registry login | Sends the browser's cookies for the Registry, no token. |
+| `auth`                          | For                                                   | What it does                                             |
+| ------------------------------- | ----------------------------------------------------- | -------------------------------------------------------- |
+| `{ type: 'token', id, secret }` | scripts and services with a Registry auth entity      | Sends them as the Registry's bearer token, no cookies.   |
+| `{ type: 'bearer', token }`     | a caller that already holds the composed bearer token | Sends `Authorization: Bearer <token>` as is, no cookies. |
+| `{ type: 'session' }`           | code running in the browser, next to a Registry login | Sends the browser's cookies for the Registry, no token.  |
+
+The composed token is `base64(id):base64(secret)` of the auth entity, the form `type: 'token'` builds. Pass it with
+`type: 'bearer'` when the caller is given the token and never the entity.
 
 ## Signed overrides
 

@@ -6,6 +6,8 @@
 export type Auth =
     /** The id and secret of a Registry auth entity, for scripts and services; sent as a bearer token, no cookies */
     | { type: 'token'; id: string; secret: string }
+    /** A Registry bearer token already composed, `base64(id):base64(secret)`, for a caller that holds the token */
+    | { type: 'bearer'; token: string }
     /** The Registry session of the browser the code runs in, as in the ILC Overrides extension */
     | { type: 'session' };
 
@@ -27,6 +29,8 @@ export function resolveAuth(auth: Auth): AuthStrategy {
                 credentials: 'omit',
                 headers: { Authorization: `Bearer ${base64(auth.id)}:${base64(auth.secret)}` },
             };
+        case 'bearer':
+            return { credentials: 'omit', headers: { Authorization: `Bearer ${auth.token}` } };
         case 'session':
             return { credentials: 'include', headers: {} };
     }
